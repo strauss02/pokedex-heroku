@@ -29,7 +29,7 @@ releaseButton.addEventListener('click', releasePokemon)
 caughtButton.addEventListener('click', showCaught)
 
 async function showCaught() {
-  const res = await axios.get(`http://localhost:8080/pokemon/list`, {
+  const res = await axios.get(`/pokemon/list`, {
     headers: { username: username },
   })
   let caughtPokemonsEl = document.querySelector('.pokemons-caught')
@@ -46,7 +46,7 @@ async function showCaught() {
 async function catchPokemon() {
   let pokemonId = pokeData.name
   axios
-    .put(`http://localhost:8080/pokemon/catch/${pokemonId}`, '', {
+    .put(`/pokemon/catch/${pokemonId}`, '', {
       headers: { username: username },
     })
     .catch((err) => inform(`you can't catch a pokemon you already caught!`))
@@ -55,7 +55,7 @@ async function catchPokemon() {
 async function releasePokemon() {
   let pokemonId = pokeData.name
   axios
-    .delete(`http://localhost:8080/pokemon/release/${pokemonId}`, {
+    .delete(`/pokemon/release/${pokemonId}`, {
       headers: { username: username },
     })
     .catch((err) => inform(`you can't release a pokemon you didn't catch`))
@@ -67,7 +67,7 @@ async function searchPokemon() {
     console.log(pokeName)
     //search by query
     await axios
-      .get(`http://localhost:8080/pokemon/query?name=${pokeName}`, {
+      .get(`/pokemon/query?name=${pokeName}`, {
         headers: { username: username },
       })
       .then(async function (res) {
@@ -81,7 +81,7 @@ async function searchPokemon() {
 
     //search by id
     await axios
-      .get(`http://localhost:8080/pokemon/get/${pokeName}`, {
+      .get(`/pokemon/get/${pokeName}`, {
         headers: { username: username },
       })
       .then(async (res) => {
