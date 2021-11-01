@@ -3,3 +3,6 @@ node_modules
 /.idea
 
 dist 2
+
+dist test
+dist deprecated
