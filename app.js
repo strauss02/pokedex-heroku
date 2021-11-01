@@ -4,7 +4,7 @@ const app = new express()
 const cors = require('cors')
 const path = require('path')
 
-const userRouter = require('.src/routers/userRouter')
+const userRouter = require('./src/routers/userRouter')
 const userHandler = require('./src/middleware/userHandler')
 const pokemonRouter = require('./routers/pokemonRouter')
 const errorHandler = require('./src/middleware/errorHandler')
