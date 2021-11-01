@@ -141,7 +141,7 @@ function inform(msg) {
     errorElement.remove()
   }, 3000)
 
-  console.log(err)
+  console.log(msg)
 }
 
 async function showTypeList(e) {
