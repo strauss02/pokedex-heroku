@@ -1,12 +1,14 @@
 # pokedex-heroku
 
+[link](https://the-poke-dex.herokuapp.com/)
+
 The famous pokedex we all know, but wait- now it's fully deployed on heroku!  
 INCLUDING THE FRONTEND  
 AAAAND THE BACKEND!!!  
  ![alt text](./screenshot.png)
 
-## Use
-
+## Use  
+Click [here](https://the-poke-dex.herokuapp.com/) to use.  
 Search your favorite pokemon by entering a pokemon name or an ID in the search box.
 hit search.  
 to see more pokemons of a type, click that type, and a modal will appear.  
