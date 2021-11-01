@@ -8,6 +8,7 @@ const usernameInput = document.querySelector('.username-input')
 const catchButton = document.querySelector('.catch-button')
 const releaseButton = document.querySelector('.release-button')
 const caughtButton = document.querySelector('.caught-button')
+const testURL = 'http://localhost:8080'
 
 const searchInput = document.querySelector('.search')
 
@@ -29,7 +30,7 @@ releaseButton.addEventListener('click', releasePokemon)
 caughtButton.addEventListener('click', showCaught)
 
 async function showCaught() {
-  const res = await axios.get(`/pokemon/list`, {
+  const res = await axios.get(`${testURL}/pokemon/list`, {
     headers: { username: username },
   })
   let caughtPokemonsEl = document.querySelector('.pokemons-caught')
@@ -43,22 +44,24 @@ async function showCaught() {
   showCaughtModal()
 }
 
-async function catchPokemon() {
+async function catchPokemon(e) {
   let pokemonId = pokeData.name
   axios
-    .put(`/pokemon/catch/${pokemonId}`, '', {
+    .put(`${testURL}/pokemon/catch/${pokemonId}`, '', {
       headers: { username: username },
     })
     .catch((err) => inform(`you can't catch a pokemon you already caught!`))
 }
 
-async function releasePokemon() {
+async function releasePokemon(e) {
+  e.preventDefault()
   let pokemonId = pokeData.name
   axios
-    .delete(`/pokemon/release/${pokemonId}`, {
+    .delete(`${testURL}/pokemon/release/${pokemonId}`, {
       headers: { username: username },
     })
     .catch((err) => inform(`you can't release a pokemon you didn't catch`))
+  e.preventDefault()
 }
 async function searchPokemon() {
   const pokeName = searchInput.value
@@ -67,7 +70,7 @@ async function searchPokemon() {
     console.log(pokeName)
     //search by query
     await axios
-      .get(`/pokemon/query?name=${pokeName}`, {
+      .get(`${testURL}/pokemon/query?name=${pokeName}`, {
         headers: { username: username },
       })
       .then(async function (res) {
@@ -81,7 +84,7 @@ async function searchPokemon() {
 
     //search by id
     await axios
-      .get(`/pokemon/get/${pokeName}`, {
+      .get(`${testURL}/pokemon/get/${pokeName}`, {
         headers: { username: username },
       })
       .then(async (res) => {

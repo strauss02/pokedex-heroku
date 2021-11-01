@@ -81,10 +81,11 @@ router.get('/', (req, res) => {
 router.get('/list', (req, res) => {
   username = req.header('username')
   let idList = []
-  let userDir = fs.readdirSync(`./users/${username}`)
+  console.log('line 84')
+  let userDir = fs.readdirSync(`./src/users/${username}`)
   for (let file of userDir) {
     let parsrFile = JSON.parse(
-      fs.readFileSync(`./users/${username}/${file}`, 'utf8')
+      fs.readFileSync(`./src/users/${username}/${file}`, 'utf8')
     )
     idList.push(parsrFile.name)
   }
@@ -92,10 +93,10 @@ router.get('/list', (req, res) => {
 })
 
 function getAllCaughtPokemon(user) {
-  const fileList = fs.readdirSync(`./users/${user}/`)
+  const fileList = fs.readdirSync(`./src/users/${user}/`)
   const arr = []
   fileList.forEach((pokemonFile) => {
-    const file = fs.readFileSync(`./users/${user}/${pokemonFile}`)
+    const file = fs.readFileSync(`./src/users/${user}/${pokemonFile}`)
     const pokemonID = JSON.parse(file).id
     arr.push(pokemonID)
   })
@@ -103,7 +104,7 @@ function getAllCaughtPokemon(user) {
 }
 
 function assertPokemonAlreadyCaught(user, id) {
-  return fs.existsSync(`./users/${user}/${id}.json`)
+  return fs.existsSync(`./src/users/${user}/${id}.json`)
 }
 
 function getPokemonObj(data) {
@@ -125,7 +126,7 @@ router.delete('/release/:id', (req, res, next) => {
   const user = req.header('username')
   const pokemonID = req.params.id
   if (assertPokemonAlreadyCaught(user, pokemonID)) {
-    fs.unlinkSync(`./users/${user}/${pokemonID}.json`)
+    fs.unlinkSync(`./src/users/${user}/${pokemonID}.json`)
     res.send('pokemon released')
   } else {
     // const err = new Error('no pokemon exists!')
@@ -156,20 +157,23 @@ router.delete('/release/:id', (req, res, next) => {
 router.put('/catch/:id', (req, response, next) => {
   const username = req.header('username')
   const pokemonId = req.params.id
-  fs.readdir('./users', async (err, res) => {
+  fs.readdir('./src/users', async (err, res) => {
+    console.log('dont let me into ma zone')
     if (err) {
       console.log(err)
       return
     }
     if (!res.includes(username)) {
-      fs.mkdirSync(`./users/${username}`)
+      //if the username does not exist
+      fs.mkdirSync(`./src/users/${username}`)
       fs.writeFileSync(
-        `./users/${username}/${pokemonId}.json`,
+        `./src/users/${username}/${pokemonId}.json`,
         JSON.stringify(getPokemonObj(await getPokemonData(pokemonId)))
       )
       response.send('Catch!')
-    }
-    if (fs.readdirSync(`./users/${username}`).includes(`${pokemonId}.json`)) {
+    } else if (
+      fs.readdirSync(`./src/users/${username}`).includes(`${pokemonId}.json`)
+    ) {
       next({
         status: 403,
         message: {
@@ -179,7 +183,7 @@ router.put('/catch/:id', (req, response, next) => {
       })
     } else {
       fs.writeFileSync(
-        `./users/${username}/${pokemonId}.json`,
+        `./src/users/${username}/${pokemonId}.json`,
         JSON.stringify(getPokemonObj(await getPokemonData(pokemonId)))
       )
       response.send('Catch!')
@@ -196,14 +200,14 @@ async function getPokemonData(id) {
 //check user exists, if not, create it's folder
 function handleCatch(user, id, next, putRes) {
   console.log('handlecatch id', id)
-  fs.readdir('./users', (err, res) => {
+  fs.readdir('./src/users', (err, res) => {
     if (err) {
       console.log(err)
       return
     }
     if (!res.includes(user)) {
       console.log('no user exists. creating new user folder')
-      fs.mkdirSync(`./users/${user}`)
+      fs.mkdirSync(`./src/users/${user}`)
     }
     createPokemonJson(id, user, next, putRes)
   })
@@ -211,7 +215,7 @@ function handleCatch(user, id, next, putRes) {
 
 //creates a pokemon.json file in the user's folder
 async function createPokemonJson(id, user, next, putRes) {
-  fs.readdir(`./users/${user}`, async (err, res) => {
+  fs.readdir(`./src/users/${user}`, async (err, res) => {
     if (err) {
       console.log(err)
     } else {
